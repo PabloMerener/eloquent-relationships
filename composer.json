@@ -1,0 +1,29 @@
+{
+    "name": "pablo-merener/eloquent-relationships",
+    "description": "Get eloquent relationships",
+    "keywords": ["laravel", "helper", "eloquent", "relationships"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pablo Merener",
+            "email": "pablo.merener@gmail.com"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
