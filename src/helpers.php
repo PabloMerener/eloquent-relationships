@@ -29,7 +29,7 @@ if (!function_exists('rel')) {
             try {
                 $methodReturn = $instance->$methodName();
             } catch (\Throwable $th) {
-                $relations['WARNING! wrong relationship methods'][$methodName] = $th->getMessage();
+                $relations['WARNING! wrong model methods'][$methodName] = $th->getMessage();
             }
             if ($methodReturn instanceof Relation) {
                 $type = (new \ReflectionClass($methodReturn))->getShortName();
