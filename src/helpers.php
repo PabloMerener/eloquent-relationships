@@ -26,7 +26,11 @@ if (!function_exists('rel')) {
         $relations = [];
         foreach ($methods as $method) {
             $methodName = $method->getName();
-            $methodReturn = $instance->$methodName();
+            try {
+                $methodReturn = $instance->$methodName();
+            } catch (\Throwable $th) {
+                $relations['WARNING! wrong relationship methods'][$methodName] = $th->getMessage();
+            }
             if ($methodReturn instanceof Relation) {
                 $type = (new \ReflectionClass($methodReturn))->getShortName();
                 $class = get_class($methodReturn->getRelated());
