@@ -9,9 +9,10 @@ if (!function_exists('rel')) {
      *
      * @return object
      */
-    function rel(Model $instance)
+    function rel(Model $model)
     {
         // Get public methods declared without parameters and non inherited
+        $instance = $model->replicate();
         $class = get_class($instance);
         $allMethods = (new \ReflectionClass($class))->getMethods(\ReflectionMethod::IS_PUBLIC);
         $methods = array_filter(
@@ -22,24 +23,16 @@ if (!function_exists('rel')) {
         );
 
         \DB::beginTransaction();
-
         $relations = [];
         foreach ($methods as $method) {
-            try {
-                $methodName = $method->getName();
-                $methodReturn = $instance->$methodName();
-                if (!$methodReturn instanceof Relation) {
-                    continue;
-                }
-            } catch (\Throwable $th) {
-                continue;
+            $methodName = $method->getName();
+            $methodReturn = $instance->$methodName();
+            if ($methodReturn instanceof Relation) {
+                $type = (new \ReflectionClass($methodReturn))->getShortName();
+                $class = get_class($methodReturn->getRelated());
+                $relations[lcfirst($type)][$methodName] = $class;
             }
-
-            $type = (new \ReflectionClass($methodReturn))->getShortName();
-            $model = get_class($methodReturn->getRelated());
-            $relations[lcfirst($type)][$methodName] = $model;
         }
-
         \DB::rollBack();
 
         return (object) $relations;
